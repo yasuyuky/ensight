@@ -3,7 +3,6 @@ use chrono::{DateTime, Utc};
 use serde::{de::DeserializeOwned, Deserialize};
 use std::fmt;
 use structopt::StructOpt;
-mod circleci;
 
 #[derive(StructOpt)]
 struct Opt {
