@@ -1,9 +1,10 @@
 use ansi_term::Colour;
-use chrono::{DateTime, Utc};
-use serde::{de::DeserializeOwned, Deserialize};
+use serde::de::DeserializeOwned;
 use structopt::StructOpt;
 
+mod insight;
 mod vcs;
+use insight::{InsightItem, Insights, Item, Items};
 use vcs::Vcs;
 
 #[derive(StructOpt)]
@@ -22,55 +23,6 @@ enum Command {
         #[structopt(long = "sort")]
         sort: bool,
     },
-}
-
-#[derive(Debug, Deserialize)]
-struct Insights {
-    items: Vec<InsightItem>,
-}
-
-#[derive(Debug, Deserialize)]
-struct InsightItem {
-    name: String,
-    metrics: Metrics,
-    window_start: DateTime<Utc>,
-    window_end: DateTime<Utc>,
-}
-
-#[derive(Debug, Deserialize)]
-struct Metrics {
-    success_rate: f64,
-    total_runs: usize,
-    failed_runs: usize,
-    successful_runs: usize,
-    throughput: f64,
-    duration_metrics: DurationMetrics,
-    total_credits_used: usize,
-}
-
-#[derive(Debug, Deserialize)]
-struct DurationMetrics {
-    min: usize,
-    max: usize,
-    median: usize,
-    mean: usize,
-    p95: usize,
-    standard_deviation: f64,
-}
-
-#[derive(Debug, Deserialize)]
-struct Items {
-    items: Vec<Item>,
-}
-
-#[derive(Debug, Deserialize)]
-struct Item {
-    id: Option<String>,
-    // created_at: DateTime<Utc>,
-    // stopped_at: DateTime<Utc>,
-    duration: usize,
-    status: Option<String>,
-    credits_used: usize,
 }
 
 async fn get<T: DeserializeOwned>(token: &str, path: &str) -> surf::Result<T> {
