@@ -78,7 +78,7 @@ fn print_gr(l: usize, items: &[Item], s: &str) {
     let unknown_style = Colour::Black.on(Colour::Yellow);
     for (i, item) in items.iter().take(l).enumerate() {
         let c = s.get(i..i + 1).unwrap_or(" ");
-        match item.status.as_ref().and_then(|s| Some(s.as_str())) {
+        match item.status.as_deref() {
             Some("success") => print!("{}", success_style.paint(c)),
             Some("failed") => print!("{}", failure_style.paint(c)),
             _ => print!("{}", unknown_style.paint(c)),
