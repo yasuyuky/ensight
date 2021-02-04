@@ -13,7 +13,7 @@ pub async fn print_all(vcs: &Vcs, slug: &str, sort: bool) -> anyhow::Result<()> 
         for insight in &insights.items {
             let path = format!("insights/{}/{}/workflows/{}", &vcs, &slug, insight.name);
             let result = get::<Items>(&token, &path).await.unwrap();
-            println!("");
+            println!();
             print!("W:");
             print_gr(l, &result.items, &insight.name);
             print_insight(&c, insight);
