@@ -57,19 +57,19 @@ async fn print_jobs(vcs: &Vcs, slug: &str, workflow: &str, sort: bool) -> anyhow
 fn print_insight(c: &colorgrad::Gradient, insight: &InsightItem) {
     let (r, g, b, _) = c.at(insight.metrics.success_rate).rgba_u8();
     let style = Colour::RGB(31, 31, 31).on(Colour::RGB(r, g, b));
-    let s = format!(
+    let runs = format!(
         " {:3}/{:3} {:7.3}% ",
         insight.metrics.successful_runs,
         insight.metrics.total_runs,
         insight.metrics.success_rate * 100f64,
     );
-    let t = format!(
+    let credits = format!(
         "avg.{:4}sec. {:7}credits ${:8.4}",
         insight.metrics.duration_metrics.mean,
         insight.metrics.total_credits_used,
         insight.metrics.total_credits_used as f64 * 0.0006,
     );
-    println!("{} {}", style.paint(s), t);
+    println!("{} {}", style.paint(runs), credits);
 }
 
 fn print_gr(l: usize, items: &[Item], s: &str) {
