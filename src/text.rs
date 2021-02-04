@@ -13,7 +13,7 @@ pub async fn print_all(vcs: &Vcs, slug: &str, sort: bool) -> anyhow::Result<()> 
         for insight in &insights.items {
             let path = format!("insights/{}/{}/workflows/{}", &vcs, &slug, insight.name);
             let result = get::<Items>(&token, &path).await.unwrap();
-            println!("");
+            println!();
             print!("W:");
             print_gr(l, &result.items, &insight.name);
             print_insight(&c, insight);
@@ -57,19 +57,19 @@ async fn print_jobs(vcs: &Vcs, slug: &str, workflow: &str, sort: bool) -> anyhow
 fn print_insight(c: &colorgrad::Gradient, insight: &InsightItem) {
     let (r, g, b, _) = c.at(insight.metrics.success_rate).rgba_u8();
     let style = Colour::RGB(31, 31, 31).on(Colour::RGB(r, g, b));
-    let s = format!(
+    let runs = format!(
         " {:3}/{:3} {:7.3}% ",
         insight.metrics.successful_runs,
         insight.metrics.total_runs,
         insight.metrics.success_rate * 100f64,
     );
-    let t = format!(
+    let credits = format!(
         "avg.{:4}sec. {:7}credits ${:8.4}",
         insight.metrics.duration_metrics.mean,
         insight.metrics.total_credits_used,
         insight.metrics.total_credits_used as f64 * 0.0006,
     );
-    println!("{} {}", style.paint(s), t);
+    println!("{} {}", style.paint(runs), credits);
 }
 
 fn print_gr(l: usize, items: &[Item], s: &str) {
@@ -78,7 +78,7 @@ fn print_gr(l: usize, items: &[Item], s: &str) {
     let unknown_style = Colour::Black.on(Colour::Yellow);
     for (i, item) in items.iter().take(l).enumerate() {
         let c = s.get(i..i + 1).unwrap_or(" ");
-        match item.status.as_ref().and_then(|s| Some(s.as_str())) {
+        match item.status.as_deref() {
             Some("success") => print!("{}", success_style.paint(c)),
             Some("failed") => print!("{}", failure_style.paint(c)),
             _ => print!("{}", unknown_style.paint(c)),
