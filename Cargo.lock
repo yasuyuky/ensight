@@ -358,9 +358,9 @@ dependencies = [
 
 [[package]]
 name = "colorgrad"
-version = "0.1.0"
+version = "0.5.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "71b9defcb8a048f95f5a911866a24b480b6c42b2a923ccc9bd88ade85c58c28b"
+checksum = "62c834d2dcb442c0fdf4775e72707db38c5a358a6da74f3041f93563d02ce306"
 dependencies = [
  "csscolorparser",
 ]
@@ -432,9 +432,9 @@ dependencies = [
 
 [[package]]
 name = "csscolorparser"
-version = "0.2.0"
+version = "0.5.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "7591a0bd9d7456ec45e81e4f90c1a80d3636be37e5251efff3cf10cbe1c35a3d"
+checksum = "b2fb3bd93ef32553e3d5b9f8020028f41ac64ff8a230033d5d548b8222d21fbe"
 dependencies = [
  "phf",
 ]
