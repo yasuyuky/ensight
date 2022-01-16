@@ -491,6 +491,16 @@ dependencies = [
 ]
 
 [[package]]
+name = "dashmap"
+version = "4.0.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "e77a43b28d0668df09411cb0bc9a8c2adc40f9a048afe863e05fd43251e8e39c"
+dependencies = [
+ "cfg-if 1.0.0",
+ "num_cpus",
+]
+
+[[package]]
 name = "data-encoding"
 version = "2.3.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -695,6 +705,17 @@ dependencies = [
 ]
 
 [[package]]
+name = "getrandom"
+version = "0.2.4"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "418d37c8b1d42553c93648be529cb70f920d3baf8ef469b74b9638df426e0b4c"
+dependencies = [
+ "cfg-if 1.0.0",
+ "libc",
+ "wasi 0.10.0+wasi-snapshot-preview1",
+]
+
+[[package]]
 name = "ghash"
 version = "0.3.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -774,12 +795,14 @@ dependencies = [
 
 [[package]]
 name = "http-client"
-version = "6.2.0"
+version = "6.5.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "010092b71b94ee49293995625ce7a607778b8b4099c8088fa84fd66bd3e0f21c"
+checksum = "ea880b03c18a7e981d7fb3608b8904a98425d53c440758fcebf7d934aa56547c"
 dependencies = [
  "async-std",
  "async-trait",
+ "cfg-if 1.0.0",
+ "dashmap",
  "http-types",
  "isahc",
  "log",
@@ -1242,7 +1265,7 @@ version = "0.7.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "6a6b1679d49b24bbfe0c803429aa1874472f50d9b363131f0e89fc356b544d03"
 dependencies = [
- "getrandom",
+ "getrandom 0.1.16",
  "libc",
  "rand_chacha",
  "rand_core",
@@ -1266,7 +1289,7 @@ version = "0.5.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "90bde5296fc891b0cef12a6d03ddccc162ce7b2aff54160af9338f8d40df6d19"
 dependencies = [
- "getrandom",
+ "getrandom 0.1.16",
 ]
 
 [[package]]
@@ -1558,21 +1581,22 @@ checksum = "1e81da0851ada1f3e9d4312c704aa4f8806f0f9d69faaf8df2f3464b4a9437c2"
 
 [[package]]
 name = "surf"
-version = "2.1.0"
+version = "2.3.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "7189c787d96fe18fef704950de76d590022d9d70858a4a201e1f07a0666882ea"
+checksum = "718b1ae6b50351982dedff021db0def601677f2120938b070eadb10ba4038dd7"
 dependencies = [
  "async-std",
  "async-trait",
- "cfg-if 0.1.10",
+ "cfg-if 1.0.0",
  "encoding_rs",
  "futures-util",
+ "getrandom 0.2.4",
  "http-client",
  "http-types",
  "log",
  "mime_guess",
  "once_cell",
- "pin-project-lite 0.1.11",
+ "pin-project-lite 0.2.1",
  "serde",
  "serde_json",
  "web-sys",
