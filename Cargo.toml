@@ -23,4 +23,4 @@ ansi_term = "0.12.1"
 
 [dependencies.async-std]
 features = ["attributes"]
-version = "1.11.0"
+version = "1.12.0"
