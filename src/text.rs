@@ -73,9 +73,6 @@ fn print_insight(c: &colorgrad::Gradient, insight: &InsightItem) {
 }
 
 fn print_gr(l: usize, items: &[Item], s: &str) {
-    let success_style = Colour::Black.on(Colour::Green);
-    let failure_style = Colour::Black.on(Colour::Red);
-    let unknown_style = Colour::Black.on(Colour::Yellow);
     let size = items.len();
     for i in 0..l {
         // [0123456789]
@@ -87,9 +84,9 @@ fn print_gr(l: usize, items: &[Item], s: &str) {
         let style = items
             .get(idx)
             .map(|item| match item.status.as_deref() {
-                Some("success") => success_style,
-                Some("failed") => failure_style,
-                _ => unknown_style,
+                Some("success") => Colour::Black.on(Colour::Green),
+                Some("failed") => Colour::Black.on(Colour::Red),
+                _ => Colour::Black.on(Colour::Yellow),
             })
             .unwrap_or(Colour::Black.on(Colour::White));
         let c = s.get(i..i + 1).unwrap_or(" ");
