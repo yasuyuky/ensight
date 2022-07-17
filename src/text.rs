@@ -8,7 +8,6 @@ pub async fn print_all(vcs: &Vcs, slug: &str, sort: bool, n: Option<usize>) -> a
     let token = std::env::var("CIRCLECI_TOKEN")?;
     let result = get::<Insights>(&token, &path).await;
     if let Ok(insights) = result {
-        let c = colorgrad::warm();
         let l = n.unwrap_or(insights.items.iter().map(|i| i.name.len()).max().unwrap());
         for insight in &insights.items {
             let path = format!("insights/{}/{}/workflows/{}", &vcs, &slug, insight.name);
@@ -16,7 +15,7 @@ pub async fn print_all(vcs: &Vcs, slug: &str, sort: bool, n: Option<usize>) -> a
             println!();
             print!("Workflow:");
             print_gr(l, &result.items, &insight.name);
-            print_insight(&c, insight);
+            print_insight(insight);
             print_jobs(&vcs, slug, &insight.name, sort, n).await?;
         }
     }
@@ -42,7 +41,6 @@ async fn print_jobs(
                     .unwrap()
             });
         }
-        let c = colorgrad::warm();
         let l = n.unwrap_or(insights.items.iter().map(|i| i.name.len()).max().unwrap());
         for insight in insights.items {
             let path = format!(
@@ -52,7 +50,7 @@ async fn print_jobs(
             let result = get::<Items>(&token, &path).await.unwrap();
             print!("Job:");
             print_gr(l, &result.items, &insight.name);
-            print_insight(&c, &insight);
+            print_insight(&insight);
         }
     } else {
         println!("{:#?}", result);
@@ -60,7 +58,8 @@ async fn print_jobs(
     Ok(())
 }
 
-fn print_insight(c: &colorgrad::Gradient, insight: &InsightItem) {
+fn print_insight(insight: &InsightItem) {
+    let c = colorgrad::warm();
     let (r, g, b, _) = c.at(insight.metrics.success_rate).rgba_u8();
     let style = Colour::RGB(31, 31, 31).on(Colour::RGB(r, g, b));
     let runs = format!(
