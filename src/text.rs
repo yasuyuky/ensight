@@ -3,13 +3,13 @@ use crate::insight::{InsightItem, Insights, Item, Items};
 use crate::vcs::Vcs;
 use ansi_term::Colour;
 
-pub async fn print_all(vcs: &Vcs, slug: &str, sort: bool) -> anyhow::Result<()> {
+pub async fn print_all(vcs: &Vcs, slug: &str, sort: bool, n: Option<usize>) -> anyhow::Result<()> {
     let path = format!("insights/{}/{}/workflows", &vcs, &slug);
     let token = std::env::var("CIRCLECI_TOKEN")?;
     let result = get::<Insights>(&token, &path).await;
     if let Ok(insights) = result {
         let c = colorgrad::warm();
-        let l = insights.items.iter().map(|i| i.name.len()).max().unwrap();
+        let l = n.unwrap_or(insights.items.iter().map(|i| i.name.len()).max().unwrap());
         for insight in &insights.items {
             let path = format!("insights/{}/{}/workflows/{}", &vcs, &slug, insight.name);
             let result = get::<Items>(&token, &path).await.unwrap();
@@ -17,13 +17,19 @@ pub async fn print_all(vcs: &Vcs, slug: &str, sort: bool) -> anyhow::Result<()> 
             print!("W:");
             print_gr(l, &result.items, &insight.name);
             print_insight(&c, insight);
-            print_jobs(&vcs, slug, &insight.name, sort).await?;
+            print_jobs(&vcs, slug, &insight.name, sort, n).await?;
         }
     }
     Ok(())
 }
 
-async fn print_jobs(vcs: &Vcs, slug: &str, workflow: &str, sort: bool) -> anyhow::Result<()> {
+async fn print_jobs(
+    vcs: &Vcs,
+    slug: &str,
+    workflow: &str,
+    sort: bool,
+    n: Option<usize>,
+) -> anyhow::Result<()> {
     let path = format!("insights/{}/{}/workflows/{}/jobs", &vcs, &slug, workflow);
     let token = std::env::var("CIRCLECI_TOKEN")?;
     let result = get::<Insights>(&token, &path).await;
@@ -37,7 +43,7 @@ async fn print_jobs(vcs: &Vcs, slug: &str, workflow: &str, sort: bool) -> anyhow
             });
         }
         let c = colorgrad::warm();
-        let l = insights.items.iter().map(|i| i.name.len()).max().unwrap();
+        let l = n.unwrap_or(insights.items.iter().map(|i| i.name.len()).max().unwrap());
         for insight in insights.items {
             let path = format!(
                 "insights/{}/{}/workflows/{}/jobs/{}",
