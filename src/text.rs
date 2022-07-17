@@ -14,7 +14,7 @@ pub async fn print_all(vcs: &Vcs, slug: &str, sort: bool, n: Option<usize>) -> a
             let path = format!("insights/{}/{}/workflows/{}", &vcs, &slug, insight.name);
             let result = get::<Items>(&token, &path).await.unwrap();
             println!();
-            print!("W:");
+            print!("Workflow:");
             print_gr(l, &result.items, &insight.name);
             print_insight(&c, insight);
             print_jobs(&vcs, slug, &insight.name, sort, n).await?;
@@ -50,7 +50,7 @@ async fn print_jobs(
                 &vcs, &slug, workflow, insight.name
             );
             let result = get::<Items>(&token, &path).await.unwrap();
-            print!("J:");
+            print!("Job:");
             print_gr(l, &result.items, &insight.name);
             print_insight(&c, &insight);
         }
@@ -70,7 +70,7 @@ fn print_insight(c: &colorgrad::Gradient, insight: &InsightItem) {
         insight.metrics.success_rate * 100f64,
     );
     let credits = format!(
-        "avg.{:4}sec. {:7}credits ${:8.4}",
+        "avg.{:4} sec. {:7} cr. ${:8.4}",
         insight.metrics.duration_metrics.mean,
         insight.metrics.total_credits_used,
         insight.metrics.total_credits_used as f64 * 0.0006,
