@@ -76,12 +76,23 @@ fn print_gr(l: usize, items: &[Item], s: &str) {
     let success_style = Colour::Black.on(Colour::Green);
     let failure_style = Colour::Black.on(Colour::Red);
     let unknown_style = Colour::Black.on(Colour::Yellow);
-    for (i, item) in items.iter().take(l).enumerate() {
+    let size = items.len();
+    for i in 0..l {
+        // [0123456789]
+        //      [01234]
+        //    ^      ^
+        //    0   i  l
+        //        ^ size - l + i (must be positive)
+        let idx = if l < size + i { size + i - l } else { size };
+        let style = items
+            .get(idx)
+            .map(|item| match item.status.as_deref() {
+                Some("success") => success_style,
+                Some("failed") => failure_style,
+                _ => unknown_style,
+            })
+            .unwrap_or(Colour::Black.on(Colour::White));
         let c = s.get(i..i + 1).unwrap_or(" ");
-        match item.status.as_deref() {
-            Some("success") => print!("{}", success_style.paint(c)),
-            Some("failed") => print!("{}", failure_style.paint(c)),
-            _ => print!("{}", unknown_style.paint(c)),
-        }
+        print!("{}", style.paint(c))
     }
 }
