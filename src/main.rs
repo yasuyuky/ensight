@@ -21,6 +21,8 @@ enum Command {
         slug: String,
         #[structopt(long = "sort")]
         sort: bool,
+        #[structopt(short = "l", long = "length")]
+        l: Option<usize>,
     },
 }
 
@@ -35,7 +37,7 @@ async fn get<T: DeserializeOwned>(token: &str, path: &str) -> surf::Result<T> {
 async fn main() -> Result<(), anyhow::Error> {
     let opt = Opt::from_args();
     match opt.command {
-        Command::Print { slug, sort } => text::print_all(&opt.vcs, &slug, sort).await?,
+        Command::Print { slug, sort, l } => text::print_all(&opt.vcs, &slug, sort, l).await?,
     }
     Ok(())
 }
