@@ -1,5 +1,5 @@
-use chrono::{DateTime, Utc};
 use serde::Deserialize;
+use time::{serde::iso8601, OffsetDateTime};
 
 #[derive(Debug, Deserialize)]
 pub struct Insights {
@@ -10,8 +10,10 @@ pub struct Insights {
 pub struct InsightItem {
     pub name: String,
     pub metrics: Metrics,
-    pub window_start: DateTime<Utc>,
-    pub window_end: DateTime<Utc>,
+    #[serde(deserialize_with = "iso8601::deserialize")]
+    pub window_start: OffsetDateTime,
+    #[serde(deserialize_with = "iso8601::deserialize")]
+    pub window_end: OffsetDateTime,
 }
 
 #[derive(Debug, Deserialize)]
@@ -43,8 +45,8 @@ pub struct Items {
 #[derive(Debug, Deserialize)]
 pub struct Item {
     pub id: Option<String>,
-    // pub created_at: DateTime<Utc>,
-    // pub stopped_at: DateTime<Utc>,
+    // pub created_at: OffsetDateTime,
+    // pub stopped_at: OffsetDateTime,
     pub duration: usize,
     pub status: Option<String>,
     pub credits_used: usize,
