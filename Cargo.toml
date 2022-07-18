@@ -15,7 +15,7 @@ toml = "0.5.9"
 once_cell = "1.13.0"
 colorgrad = "0.6.0"
 either = { version = "1.7.0", features = ["serde"] }
-serde_yaml = "0.8.25"
+serde_yaml = "0.8.26"
 anyhow = "1.0.58"
 base64 = "0.13.0"
 ansi_term = "0.12.1"
