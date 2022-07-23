@@ -16,7 +16,7 @@ pub async fn print_all(vcs: &Vcs, slug: &str, sort: bool, n: Option<usize>) -> a
             print!("Workflow:");
             print_gr(l, &result.items, &insight.name);
             print_insight(insight);
-            print_jobs(&vcs, slug, &insight.name, sort, n).await?;
+            print_jobs(vcs, slug, &insight.name, sort, n).await?;
         }
     }
     Ok(())
