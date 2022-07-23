@@ -8,7 +8,7 @@ pub async fn print_all(vcs: &Vcs, slug: &str, sort: bool, n: Option<usize>) -> a
     let token = std::env::var("CIRCLECI_TOKEN")?;
     let result = get::<Insights>(&token, &path).await;
     if let Ok(insights) = result {
-        let l = n.unwrap_or(insights.items.iter().map(|i| i.name.len()).max().unwrap());
+        let l = n.unwrap_or_else(|| insights.items.iter().map(|i| i.name.len()).max().unwrap());
         for insight in &insights.items {
             let path = format!("insights/{}/{}/workflows/{}", &vcs, &slug, insight.name);
             let result = get::<Items>(&token, &path).await.unwrap();
@@ -41,7 +41,7 @@ async fn print_jobs(
                     .unwrap()
             });
         }
-        let l = n.unwrap_or(insights.items.iter().map(|i| i.name.len()).max().unwrap());
+        let l = n.unwrap_or_else(|| insights.items.iter().map(|i| i.name.len()).max().unwrap());
         for insight in insights.items {
             let path = format!(
                 "insights/{}/{}/workflows/{}/jobs/{}",
@@ -93,7 +93,7 @@ fn print_gr(l: usize, items: &[Item], s: &str) {
                 Some("failed") => Colour::Black.on(Colour::Red),
                 _ => Colour::Black.on(Colour::Yellow),
             })
-            .unwrap_or(Colour::Black.on(Colour::White));
+            .unwrap_or_else(|| Colour::Black.on(Colour::White));
         let c = s.get(i..i + 1).unwrap_or(" ");
         print!("{}", style.paint(c))
     }
