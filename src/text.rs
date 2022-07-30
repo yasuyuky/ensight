@@ -60,7 +60,7 @@ async fn print_jobs(
 
 fn print_insight(insight: &InsightItem) {
     let c = colorgrad::warm();
-    let (r, g, b, _) = c.at(insight.metrics.success_rate).rgba_u8();
+    let [r, g, b, _] = c.at(insight.metrics.success_rate).to_rgba8();
     let style = Colour::RGB(31, 31, 31).on(Colour::RGB(r, g, b));
     let runs = format!(
         " {:3}/{:3} {:7.3}% ",
