@@ -19,7 +19,7 @@ serde_yaml = "0.9.4"
 anyhow = "1.0.60"
 base64 = "0.13.0"
 ansi_term = "0.12.1"
-time = { version = "0.3.11", features = ["serde", "serde-well-known"] }
+time = { version = "0.3.13", features = ["serde", "serde-well-known"] }
 
 [dependencies.async-std]
 features = ["attributes"]
