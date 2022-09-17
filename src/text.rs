@@ -87,15 +87,15 @@ fn print_gr(l: usize, items: &[Item], s: &str) {
         //    0   i  l
         //        ^ size - l + i (must be positive)
         let idx = if l < size + i { size + i - l } else { size };
-        let style = items
+        let styles = items
             .get(idx)
             .map(|item| match item.status.as_deref() {
-                Some("success") => Colour::Black.on(Colour::Green),
-                Some("failed") => Colour::Black.on(Colour::Red),
-                _ => Colour::Black.on(Colour::Yellow),
+                Some("success") => (Color::Black, Color::Green),
+                Some("failed") => (Color::Black, Color::Red),
+                _ => (Color::Black, Color::Yellow),
             })
-            .unwrap_or_else(|| Colour::Black.on(Colour::White));
+            .unwrap_or_else(|| (Color::Black, Color::White));
         let c = s.get(i..i + 1).unwrap_or(" ");
-        print!("{}", style.paint(c))
+        print!("{}", c.color(styles.0).on_color(styles.1))
     }
 }
