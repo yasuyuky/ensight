@@ -62,7 +62,6 @@ async fn print_jobs(
 fn print_insight(insight: &InsightItem) {
     let c = colorgrad::warm();
     let [r, g, b, _] = c.at(insight.metrics.success_rate).to_rgba8();
-    let style = Colour::RGB(31, 31, 31).on(Colour::RGB(r, g, b));
     let runs = format!(
         " {:3}/{:3} {:7.3}% ",
         insight.metrics.successful_runs,
@@ -75,7 +74,8 @@ fn print_insight(insight: &InsightItem) {
         insight.metrics.total_credits_used,
         insight.metrics.total_credits_used as f64 * 0.0006,
     );
-    println!("{} {}", style.paint(runs), credits);
+    let runtext = runs.truecolor(31, 31, 31).on_truecolor(r, g, b);
+    println!("{} {}", runtext, credits);
 }
 
 fn print_gr(l: usize, items: &[Item], s: &str) {
