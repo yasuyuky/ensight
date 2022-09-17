@@ -520,7 +520,6 @@ dependencies = [
 name = "ensight"
 version = "0.1.0"
 dependencies = [
- "ansi_term",
  "anyhow",
  "async-std",
  "base64",

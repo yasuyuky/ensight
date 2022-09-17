@@ -1,7 +1,7 @@
 use crate::get;
 use crate::insight::{InsightItem, Insights, Item, Items};
 use crate::vcs::Vcs;
-use ansi_term::Colour;
+use colored::{Color, Colorize};
 
 pub async fn print_all(vcs: &Vcs, slug: &str, sort: bool, n: Option<usize>) -> anyhow::Result<()> {
     let path = format!("insights/{}/{}/workflows", &vcs, &slug);
@@ -61,7 +61,6 @@ async fn print_jobs(
 fn print_insight(insight: &InsightItem) {
     let c = colorgrad::warm();
     let [r, g, b, _] = c.at(insight.metrics.success_rate).to_rgba8();
-    let style = Colour::RGB(31, 31, 31).on(Colour::RGB(r, g, b));
     let runs = format!(
         " {:3}/{:3} {:7.3}% ",
         insight.metrics.successful_runs,
@@ -74,7 +73,8 @@ fn print_insight(insight: &InsightItem) {
         insight.metrics.total_credits_used,
         insight.metrics.total_credits_used as f64 * 0.0006,
     );
-    println!("{} {}", style.paint(runs), credits);
+    let runtext = runs.truecolor(31, 31, 31).on_truecolor(r, g, b);
+    println!("{} {}", runtext, credits);
 }
 
 fn print_gr(l: usize, items: &[Item], s: &str) {
@@ -86,15 +86,15 @@ fn print_gr(l: usize, items: &[Item], s: &str) {
         //    0   i  l
         //        ^ size - l + i (must be positive)
         let idx = if l < size + i { size + i - l } else { size };
-        let style = items
+        let styles = items
             .get(idx)
             .map(|item| match item.status.as_deref() {
-                Some("success") => Colour::Black.on(Colour::Green),
-                Some("failed") => Colour::Black.on(Colour::Red),
-                _ => Colour::Black.on(Colour::Yellow),
+                Some("success") => (Color::Black, Color::Green),
+                Some("failed") => (Color::Black, Color::Red),
+                _ => (Color::Black, Color::Yellow),
             })
-            .unwrap_or_else(|| Colour::Black.on(Colour::White));
+            .unwrap_or_else(|| (Color::Black, Color::White));
         let c = s.get(i..i + 1).unwrap_or(" ");
-        print!("{}", style.paint(c))
+        print!("{}", c.color(styles.0).on_color(styles.1))
     }
 }
