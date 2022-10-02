@@ -1,12 +1,12 @@
+use clap::Parser;
 use std::fmt;
-use structopt::StructOpt;
 
-#[derive(Debug, StructOpt)]
-#[structopt(rename_all = "lower-case")]
+#[derive(Debug, Parser, Clone)]
+#[clap(rename_all = "lower-case")]
 pub enum Vcs {
-    #[structopt(alias = "gh")]
+    #[clap(alias = "gh")]
     GitHub,
-    #[structopt(alias = "bb")]
+    #[clap(alias = "bb")]
     BitBucket,
 }
 
