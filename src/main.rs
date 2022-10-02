@@ -1,3 +1,4 @@
+use clap::Parser;
 use serde::de::DeserializeOwned;
 use structopt::StructOpt;
 
@@ -6,7 +7,7 @@ mod text;
 mod vcs;
 use vcs::Vcs;
 
-#[derive(StructOpt)]
+#[derive(Parser)]
 struct Opt {
     #[structopt(subcommand)]
     command: Command,
@@ -14,14 +15,14 @@ struct Opt {
     vcs: Vcs,
 }
 
-#[derive(Debug, StructOpt)]
+#[derive(Debug, Parser)]
 #[structopt(rename_all = "kebab-case")]
 enum Command {
     Print {
         slug: String,
         #[structopt(long = "sort")]
         sort: bool,
-        #[structopt(short = "l", long = "length")]
+        #[structopt(short = 'l', long = "length")]
         l: Option<usize>,
     },
 }
@@ -35,7 +36,7 @@ async fn get<T: DeserializeOwned>(token: &str, path: &str) -> surf::Result<T> {
 
 #[async_std::main]
 async fn main() -> Result<(), anyhow::Error> {
-    let opt = Opt::from_args();
+    let opt = Opt::parse();
     match opt.command {
         Command::Print { slug, sort, l } => text::print_all(&opt.vcs, &slug, sort, l).await?,
     }

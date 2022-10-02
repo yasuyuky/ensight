@@ -1,7 +1,8 @@
+use clap::Parser;
 use std::fmt;
 use structopt::StructOpt;
 
-#[derive(Debug, StructOpt)]
+#[derive(Debug, Parser, Clone)]
 #[structopt(rename_all = "lower-case")]
 pub enum Vcs {
     #[structopt(alias = "gh")]
