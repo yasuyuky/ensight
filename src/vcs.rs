@@ -1,6 +1,5 @@
 use clap::Parser;
 use std::fmt;
-use structopt::StructOpt;
 
 #[derive(Debug, Parser, Clone)]
 #[clap(rename_all = "lower-case")]

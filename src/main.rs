@@ -1,6 +1,5 @@
 use clap::Parser;
 use serde::de::DeserializeOwned;
-use structopt::StructOpt;
 
 mod insight;
 mod text;
