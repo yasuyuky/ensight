@@ -9,20 +9,20 @@ use vcs::Vcs;
 
 #[derive(Parser)]
 struct Opt {
-    #[structopt(subcommand)]
+    #[clap(subcommand)]
     command: Command,
-    #[structopt(long = "vcs", default_value = "gh")]
+    #[clap(long = "vcs", default_value = "gh")]
     vcs: Vcs,
 }
 
 #[derive(Debug, Parser)]
-#[structopt(rename_all = "kebab-case")]
+#[clap(rename_all = "kebab-case")]
 enum Command {
     Print {
         slug: String,
-        #[structopt(long = "sort")]
+        #[clap(long = "sort")]
         sort: bool,
-        #[structopt(short = 'l', long = "length")]
+        #[clap(short = 'l', long = "length")]
         l: Option<usize>,
     },
 }
