@@ -53,7 +53,7 @@ async fn print_jobs(
             print_insight(&insight);
         }
     } else {
-        println!("{:#?}", result);
+        println!("{result:#?}");
     }
     Ok(())
 }
@@ -74,7 +74,7 @@ fn print_insight(insight: &InsightItem) {
         insight.metrics.total_credits_used as f64 * 0.0006,
     );
     let runtext = runs.truecolor(31, 31, 31).on_truecolor(r, g, b);
-    println!("{} {}", runtext, credits);
+    println!("{runtext} {credits}");
 }
 
 fn print_gr(l: usize, items: &[Item], s: &str) {
