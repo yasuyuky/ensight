@@ -2,6 +2,7 @@ use crate::get;
 use crate::insight::{InsightItem, Insights, Item, Items};
 use crate::vcs::Vcs;
 use colored::{Color, Colorize};
+use colorgrad::{preset, Gradient};
 
 pub async fn print_all(vcs: &Vcs, slug: &str, sort: bool, n: Option<usize>) -> anyhow::Result<()> {
     let path = format!("insights/{}/{}/workflows", &vcs, &slug);
