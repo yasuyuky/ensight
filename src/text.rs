@@ -60,8 +60,8 @@ async fn print_jobs(
 }
 
 fn print_insight(insight: &InsightItem) {
-    let c = colorgrad::warm();
-    let [r, g, b, _] = c.at(insight.metrics.success_rate).to_rgba8();
+    let c = preset::warm();
+    let [r, g, b, _] = c.at(insight.metrics.success_rate as f32).to_rgba8();
     let runs = format!(
         " {:3}/{:3} {:7.3}% ",
         insight.metrics.successful_runs,
