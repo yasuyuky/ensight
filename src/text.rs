@@ -2,6 +2,7 @@ use crate::get;
 use crate::insight::{InsightItem, Insights, Item, Items};
 use crate::vcs::Vcs;
 use colored::{Color, Colorize};
+use colorgrad::{preset, Gradient};
 
 pub async fn print_all(vcs: &Vcs, slug: &str, sort: bool, n: Option<usize>) -> anyhow::Result<()> {
     let path = format!("insights/{}/{}/workflows", &vcs, &slug);
@@ -59,8 +60,8 @@ async fn print_jobs(
 }
 
 fn print_insight(insight: &InsightItem) {
-    let c = colorgrad::warm();
-    let [r, g, b, _] = c.at(insight.metrics.success_rate).to_rgba8();
+    let c = preset::warm();
+    let [r, g, b, _] = c.at(insight.metrics.success_rate as f32).to_rgba8();
     let runs = format!(
         " {:3}/{:3} {:7.3}% ",
         insight.metrics.successful_runs,
