@@ -15,7 +15,7 @@ colorgrad = "0.7.0"
 anyhow = "1.0.95"
 base64 = "0.22.1"
 time = { version = "0.3.37", features = ["serde", "serde-well-known"] }
-clap = { version = "4.5.23", features = ["derive"] }
+clap = { version = "4.5.24", features = ["derive"] }
 
 [dependencies.async-std]
 features = ["attributes"]
