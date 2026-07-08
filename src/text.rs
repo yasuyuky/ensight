@@ -9,10 +9,12 @@ pub async fn print_all(vcs: &Vcs, slug: &str, sort: bool, n: Option<usize>) -> a
     let token = std::env::var("CIRCLECI_TOKEN")?;
     let result = get::<Insights>(&token, &path).await;
     if let Ok(insights) = result {
-        let l = n.unwrap_or_else(|| insights.items.iter().map(|i| i.name.len()).max().unwrap());
+        let l = n.unwrap_or_else(|| insight_name_width(&insights.items));
         for insight in &insights.items {
             let path = format!("insights/{}/{}/workflows/{}", &vcs, &slug, insight.name);
-            let result = get::<Items>(&token, &path).await.unwrap();
+            let result = get::<Items>(&token, &path)
+                .await
+                .map_err(|err| anyhow::anyhow!("failed to fetch {path}: {err:?}"))?;
             println!();
             print!("Workflow:");
             print_gr(l, &result.items, &insight.name);
@@ -35,20 +37,17 @@ async fn print_jobs(
     let result = get::<Insights>(&token, &path).await;
     if let Ok(mut insights) = result {
         if sort {
-            insights.items.sort_by(|a, b| {
-                a.metrics
-                    .success_rate
-                    .partial_cmp(&b.metrics.success_rate)
-                    .unwrap()
-            });
+            sort_by_success_rate(&mut insights.items);
         }
-        let l = n.unwrap_or_else(|| insights.items.iter().map(|i| i.name.len()).max().unwrap());
+        let l = n.unwrap_or_else(|| insight_name_width(&insights.items));
         for insight in insights.items {
             let path = format!(
                 "insights/{}/{}/workflows/{}/jobs/{}",
                 &vcs, &slug, workflow, insight.name
             );
-            let result = get::<Items>(&token, &path).await.unwrap();
+            let result = get::<Items>(&token, &path)
+                .await
+                .map_err(|err| anyhow::anyhow!("failed to fetch {path}: {err:?}"))?;
             print!("Job:");
             print_gr(l, &result.items, &insight.name);
             print_insight(&insight);
@@ -57,6 +56,14 @@ async fn print_jobs(
         println!("{result:#?}");
     }
     Ok(())
+}
+
+fn insight_name_width(items: &[InsightItem]) -> usize {
+    items.iter().map(|item| item.name.len()).max().unwrap_or(0)
+}
+
+fn sort_by_success_rate(items: &mut [InsightItem]) {
+    items.sort_by(|a, b| a.metrics.success_rate.total_cmp(&b.metrics.success_rate));
 }
 
 fn print_insight(insight: &InsightItem) {
