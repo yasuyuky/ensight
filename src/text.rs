@@ -106,3 +106,61 @@ fn print_gr(l: usize, items: &[Item], s: &str) {
         print!("{}", c.color(styles.0).on_color(styles.1))
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::insight::{DurationMetrics, Metrics};
+    use time::OffsetDateTime;
+
+    fn insight(name: &str, success_rate: f64) -> InsightItem {
+        InsightItem {
+            name: name.to_string(),
+            metrics: Metrics {
+                success_rate,
+                total_runs: 0,
+                failed_runs: 0,
+                successful_runs: 0,
+                throughput: 0.0,
+                duration_metrics: DurationMetrics {
+                    min: 0,
+                    max: 0,
+                    median: 0,
+                    mean: 0,
+                    p95: 0,
+                    standard_deviation: 0.0,
+                },
+                total_credits_used: 0,
+            },
+            window_start: OffsetDateTime::UNIX_EPOCH,
+            window_end: OffsetDateTime::UNIX_EPOCH,
+        }
+    }
+
+    #[test]
+    fn insight_name_width_is_zero_for_empty_items() {
+        assert_eq!(insight_name_width(&[]), 0);
+    }
+
+    #[test]
+    fn insight_name_width_uses_longest_name() {
+        let items = vec![insight("build", 1.0), insight("integration", 1.0)];
+
+        assert_eq!(insight_name_width(&items), "integration".len());
+    }
+
+    #[test]
+    fn sort_by_success_rate_handles_nan_without_panic() {
+        let mut items = vec![
+            insight("ok", 1.0),
+            insight("nan", f64::NAN),
+            insight("failed", 0.0),
+        ];
+
+        sort_by_success_rate(&mut items);
+
+        assert_eq!(items[0].name, "failed");
+        assert_eq!(items[1].name, "ok");
+        assert_eq!(items[2].name, "nan");
+    }
+}
