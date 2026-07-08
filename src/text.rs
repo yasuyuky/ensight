@@ -47,7 +47,7 @@ async fn print_jobs(
             );
             let result = get::<Items>(&token, &path)
                 .await
-                .map_err(|err| anyhow::anyhow!("failed to fetch {path}: {err:?}"))?;
+                .map_err(|err| anyhow::anyhow!("failed to fetch {path}: {err}"))?;
             print!("Job:");
             print_gr(l, &result.items, &insight.name);
             print_insight(&insight);
