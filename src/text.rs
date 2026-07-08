@@ -14,7 +14,7 @@ pub async fn print_all(vcs: &Vcs, slug: &str, sort: bool, n: Option<usize>) -> a
             let path = format!("insights/{}/{}/workflows/{}", &vcs, &slug, insight.name);
             let result = get::<Items>(&token, &path)
                 .await
-                .map_err(|err| anyhow::anyhow!("failed to fetch {path}: {err:?}"))?;
+                .map_err(|err| anyhow::anyhow!("failed to fetch {path}: {err}"))?;
             println!();
             print!("Workflow:");
             print_gr(l, &result.items, &insight.name);
