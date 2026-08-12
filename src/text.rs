@@ -5,13 +5,13 @@ use colored::{Color, Colorize};
 use colorgrad::{preset, Gradient};
 
 pub async fn print_all(vcs: &Vcs, slug: &str, sort: bool, n: Option<usize>) -> anyhow::Result<()> {
-    let path = format!("insights/{}/{}/workflows", &vcs, &slug);
+    let path = format!("insights/{}/{}/workflows", vcs, slug);
     let token = std::env::var("CIRCLECI_TOKEN")?;
     let result = get::<Insights>(&token, &path).await;
     if let Ok(insights) = result {
         let l = n.unwrap_or_else(|| insight_name_width(&insights.items));
         for insight in &insights.items {
-            let path = format!("insights/{}/{}/workflows/{}", &vcs, &slug, insight.name);
+            let path = format!("insights/{}/{}/workflows/{}", vcs, slug, insight.name);
             let result = get::<Items>(&token, &path)
                 .await
                 .map_err(|err| anyhow::anyhow!("failed to fetch {path}: {err}"))?;
@@ -32,7 +32,7 @@ async fn print_jobs(
     sort: bool,
     n: Option<usize>,
 ) -> anyhow::Result<()> {
-    let path = format!("insights/{}/{}/workflows/{}/jobs", &vcs, &slug, workflow);
+    let path = format!("insights/{}/{}/workflows/{}/jobs", vcs, slug, workflow);
     let token = std::env::var("CIRCLECI_TOKEN")?;
     let result = get::<Insights>(&token, &path).await;
     if let Ok(mut insights) = result {
@@ -43,7 +43,7 @@ async fn print_jobs(
         for insight in insights.items {
             let path = format!(
                 "insights/{}/{}/workflows/{}/jobs/{}",
-                &vcs, &slug, workflow, insight.name
+                vcs, slug, workflow, insight.name
             );
             let result = get::<Items>(&token, &path)
                 .await

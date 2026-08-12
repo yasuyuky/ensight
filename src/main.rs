@@ -28,8 +28,8 @@ enum Command {
 }
 
 async fn get<T: DeserializeOwned>(token: &str, path: &str) -> surf::Result<T> {
-    let uri = format!("https://circleci.com/api/v2/{}", &path);
-    let value = format!("Basic {}", BASE64.encode(format!("{}:", &token)));
+    let uri = format!("https://circleci.com/api/v2/{}", path);
+    let value = format!("Basic {}", BASE64.encode(format!("{}:", token)));
     let mut res = surf::get(&uri).header("Authorization", value).await?;
     res.body_json().await
 }
